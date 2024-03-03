@@ -20,7 +20,7 @@ jobs:
                 fetch-tags: true
                 fetch-depth: 0
 
-          - name: 'Install Go for tests'
+          - name: 'Install Go for the release'
             uses: actions/setup-go@v5
             with:
               go-version: '^1.21.0'
