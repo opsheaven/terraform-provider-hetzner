@@ -3,12 +3,12 @@
 page_title: "hetzner Provider"
 subcategory: ""
 description: |-
-  This providers helps you to manage of DNS zones and records at Hetzner DNS.
+  This providers helps you to manage of Hetzner resources
 ---
 
 # hetzner Provider
 
-This providers helps you to manage of DNS zones and records at Hetzner DNS.
+This providers helps you to manage of Hetzner resources
 
 ## Example Usage
 
