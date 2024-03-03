@@ -14,8 +14,8 @@ else ifeq ($(COMMIT_TYPE),patch)
 NEXT_VERSION= v$(MAJOR).$(MINOR).$(shell echo $$(($(PATCH)+1)))
 endif
 
-.PHONY: release
-release:
+.PHONY: tag
+tag:
 ifneq ($(NEXT_VERSION),)
 	@echo "Creating tag $(NEXT_VERSION)"
 	@git tag $(NEXT_VERSION)
@@ -23,4 +23,12 @@ ifneq ($(NEXT_VERSION),)
 	@gh release create $(NEXT_VERSION) --generate-notes
 else
 	@echo "Last commit does not contain #major,#minor or #patch. Skipping tag and release!"
+endif
+
+.PHONY: release
+release: tag
+ifneq ($(NEXT_VERSION),)
+	@echo -e "$(GPG_PRIVATE_KEY)" | gpg --import
+	@go install github.com/goreleaser/goreleaser@latest
+	@goreleaser --release --clean
 endif
