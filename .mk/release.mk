@@ -14,20 +14,14 @@ else ifeq ($(COMMIT_TYPE),patch)
 NEXT_VERSION= v$(MAJOR).$(MINOR).$(shell echo $$(($(PATCH)+1)))
 endif
 
-.PHONY: tag
-tag:
+.PHONY: release
+release:
 ifneq ($(NEXT_VERSION),)
 	@echo "Creating tag $(NEXT_VERSION)"
 	@git tag $(NEXT_VERSION)
 	@git push origin $(NEXT_VERSION)
-	@gh release create $(NEXT_VERSION) --generate-notes
+	@go install github.com/goreleaser/goreleaser@latest
+	@goreleaser release --clean
 else
 	@echo "Last commit does not contain #major,#minor or #patch. Skipping tag and release!"
-endif
-
-.PHONY: release
-release: tag
-ifneq ($(NEXT_VERSION),)
-	go install github.com/goreleaser/goreleaser@latest
-	goreleaser --release --clean
 endif
