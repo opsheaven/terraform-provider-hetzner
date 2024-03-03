@@ -28,7 +28,7 @@ jobs:
             env:
               GPG_PRIVATE_KEY: '${{ secrets.GPG_PRIVATE_KEY }}'
             run:
-              echo -e "$(GPG_PRIVATE_KEY)" | gpg --import
+              echo -e "${GPG_PRIVATE_KEY}" | gpg --import
           
           - name: 'Generate Release'
             env:
