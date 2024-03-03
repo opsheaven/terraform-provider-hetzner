@@ -28,7 +28,7 @@ endif
 .PHONY: release
 release: tag
 ifneq ($(NEXT_VERSION),)
-	@echo -e "$(GPG_PRIVATE_KEY)" | gpg --import
-	@go install github.com/goreleaser/goreleaser@latest
-	@goreleaser --release --clean
+	echo -e "$(GPG_PRIVATE_KEY)" | gpg --import
+	go install github.com/goreleaser/goreleaser@latest
+	goreleaser --release --clean
 endif

@@ -29,6 +29,6 @@ jobs:
             env:
                 GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
                 GPG_PRIVATE_KEY: '${{ secrets.GPG_PRIVATE_KEY }}'
-                GPG_SIGNING_KEY_ID: '${{ secrets.GPG_SIGNING_KEY_ID }}'
+                GPG_SIGNING_KEY_ID: '${{ vars.GPG_SIGNING_KEY_ID }}'
             run: |
                 make release
