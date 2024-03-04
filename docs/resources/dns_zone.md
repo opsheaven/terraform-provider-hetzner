@@ -37,3 +37,12 @@ resource "hetzner_dns_zone" "this" {
 			*verified*: Zone is verified.
 			*failed*: Zone verification is failed.
 			*pending*: Verification is in progress
+
+## Import
+
+Import is supported using the following syntax:
+
+```shell
+# Zone can be imported by specifying the numeric identifier.
+terraform import hetzner_dns_zone.example QAASDWQ123131ASSDAD
+```

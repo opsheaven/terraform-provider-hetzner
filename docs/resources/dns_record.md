@@ -42,3 +42,12 @@ resource "hetzner_dns_record" "google_recovery_domain_verification" {
 ### Read-Only
 
 - `id` (String) Record Identifier
+
+## Import
+
+Import is supported using the following syntax:
+
+```shell
+# Record can be imported by specifying the numeric identifier.
+terraform import hetzner_dns_record.example QAASDWQ123131ASSDAD
+```
