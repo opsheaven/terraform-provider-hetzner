@@ -1,9 +1,7 @@
 package dns
 
 import (
-	"context"
 	"fmt"
-	"slices"
 	"strings"
 
 	dsSchema "github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -11,7 +9,6 @@ import (
 	rSchema "github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/opsheaven/gohetznerdns"
 )
@@ -76,9 +73,6 @@ var RecordResourceSchema = rSchema.Schema{
 		"type": rSchema.StringAttribute{
 			MarkdownDescription: fmt.Sprintf("Record Type. Supported values: [ %s ]", strings.Join(allowedRecordTypes, ",")),
 			Required:            true,
-			Validators: []validator.String{
-				&recordTypeValidator{},
-			},
 		},
 		"zone_id": rSchema.StringAttribute{
 			MarkdownDescription: "Zone identifier that record belongs to",
@@ -145,22 +139,3 @@ func (r *Records) mapFromHetznerRecords(hetznerRecords []*gohetznerdns.Record) d
 }
 
 var allowedRecordTypes = []string{"A", "AAAA", "NS", "MX", "CNAME", "RP", "TXT", "SOA", "HINFO", "SRV", "DANE", "TLSA", "DS", "CAA"}
-
-type recordTypeValidator struct {
-}
-
-func (r *recordTypeValidator) Description(context.Context) string {
-	return "Type of the Type field"
-}
-
-func (r *recordTypeValidator) MarkdownDescription(context.Context) string {
-	return fmt.Sprintf("Must be one of the values - [%s]", strings.Join(allowedRecordTypes, ","))
-}
-
-func (r *recordTypeValidator) ValidateString(ctx context.Context, req validator.StringRequest, resp *validator.StringResponse) {
-	if req.ConfigValue.IsNull() || req.ConfigValue.IsUnknown() {
-		resp.Diagnostics.AddError(fmt.Sprintf("%s is unknown", req.Path.String()), fmt.Sprintf("Please provide supported value for the field. Supported values: [%s]", strings.Join(allowedRecordTypes, ",")))
-	} else if !slices.Contains(allowedRecordTypes, req.ConfigValue.ValueString()) {
-		resp.Diagnostics.AddError(fmt.Sprintf("Invalid Value for %s", req.Path.String()), fmt.Sprintf("Please provide supported value for the field. Current Value: %s, Supported values: [%s]", req.ConfigValue.ValueString(), strings.Join(allowedRecordTypes, ",")))
-	}
-}
